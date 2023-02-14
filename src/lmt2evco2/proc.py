@@ -1,8 +1,9 @@
 """Processing Module
 """
 
-from loggin import getLogger
+from logging import getLogger
 from json import load
+from os.path import join
 
 import requests
 import pandas as pd
@@ -40,7 +41,7 @@ def call_api(from_date, to_date):
     }
 
 
-def run_model(lmtjson, factors, from_date, to_date):
+def run_model(lmtjson, factors, from_date, to_date, outdir):
     """Runs the model
     """
 
@@ -55,12 +56,12 @@ def run_model(lmtjson, factors, from_date, to_date):
         api_result["ogeneration_p"],
         api_result["Non_renewable_waste_p"]
     ]
-    df1.to_excel("factors.xlsx", index = False)
+    df1.to_excel(join(outdir, "factors.xlsx"), index = False)
 
     with open(lmtjson, encoding='utf8') as fp:
         lmt_data = load(fp)[0]
 
-        a1 = lmt_data["ResponsePlanId"]
+        a1 = lmt_data["ResponsePlanId"]         # TODO - KeyError
         a2 = lmt_data["Category"]
         a3 = lmt_data["Fuel"]
         a4 = lmt_data["Segment"]
@@ -83,8 +84,8 @@ def run_model(lmtjson, factors, from_date, to_date):
         columns = ["ResponsePlanId", "Category", "Fuel",
                    "Segment", "EuroStandard", "Stock",
                    "MeanActivity", "energyTJ", "energykwh"]
-        df2_1 = pd.DataFrame(
+        df2 = pd.DataFrame(
             [[a1, a2, a3,a4,a5,a6,a7,a8,a9]],
             columns = columns
         )
-        df2_1.to_excel("consumption.xlsx", index = False)
+        df2.to_excel(join(outdir, "consumption.xlsx"), index = False)

@@ -120,7 +120,8 @@ def main():
 
     # setting of the configuration
     run_model(args.lmt_json, args.factors_xlsx,
-              args.from_date, args.to_date)
+              args.from_date, args.to_date,
+              args.out_dir)
 
 
 if __name__ == "__main__":
