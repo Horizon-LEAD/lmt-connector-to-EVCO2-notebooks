@@ -4,7 +4,9 @@ _lmt-connector-to-EVCO2-notebooks_
 
 ## Installation
 
-The `requirements.txt` and `Pipenv` files are provided for the setup of an environment where the module can be installed. The package includes a `setup.py` file and it can be therefore installed with a `pip install .` when we are at the same working directory as the `setup.py` file. For testing purposes, one can also install the package in editable mode `pip install -e .`.
+The `requirements.txt` and `Pipenv` files are provided for the setup of an environment where the module can be installed.
+The package includes a `setup.py` file and it can be therefore installed with a `pip install .` when we are at the same working directory as the `setup.py` file.
+For testing purposes, one can also install the package in editable mode `pip install -e .`.
 
 After the install is completed, an executable `lmt2evco2` will be available to the user.
 
@@ -42,7 +44,8 @@ options:
 
 ### Examples
 
-In the following examples, it is assumed that the user's terminal is at the project's root directory. Also that all the necessary input files are located in the `sample-data/input` directory and that the `sample-data/output` directory exists.
+In the following examples, it is assumed that the user's terminal is at the project's root directory.
+Also that all the necessary input files are located in the `sample-data/input` directory and that the `sample-data/output` directory exists.
 
 The user can then execute the model by running the executable.
 
