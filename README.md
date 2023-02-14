@@ -20,9 +20,25 @@ docker build -t lmt-2-evco2:latest .
 The executable's help message provides information on the parameters that are needed.
 
 ```
-$ lmt2evco2 -h
-```
+lmt2evco2 -h
+usage: lmt2evco2 [-h] [-v] [--flog] lmt_json factors_xlsx from_date to_date out_dir
 
+Main Entrypoint module
+
+Based on argparse
+
+positional arguments:
+  lmt_json         The path of the input JSON file as returned by LMT model
+  factors_xlsx     The path of the input XLSX file with factors
+  from_date        The from-date to get the energy production
+  to_date          The to-date to get the energy production
+  out_dir          The output directory
+
+options:
+  -h, --help       show this help message and exit
+  -v, --verbosity  Increase output verbosity (default: 0)
+  --flog           Stores logs to file (default: False)
+```
 
 ### Examples
 
@@ -34,6 +50,8 @@ The user can then execute the model by running the executable.
 lmt2evco2 -vvv \
     sample-data/input/lmt.json \
     sample-data/input/factors.xlsx \
+    2022-09-01 \
+    2022-12-31 \
     sample-data/output
 ```
 
