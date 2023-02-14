@@ -41,14 +41,14 @@ def strdir(path):
         return path
     raise ArgumentTypeError("Input directory does not exist")
 
-def date(input):
+def date(date_input):
     """Argparse type checking method
     string path for file should exist"""
     try:
-        _ = datetime.strptime(input, "%Y-%m-%d")
-        return input
-    except ValueError:
-        raise ArgumentTypeError("Input dates do not conform with format YYYY-mm-dd")
+        _ = datetime.strptime(date_input, "%Y-%m-%d")
+        return date_input
+    except ValueError as exc:
+        raise ArgumentTypeError("Date input dates do not conform with format YYYY-mm-dd") from exc
 
 
 def get_log_level(vcount):
