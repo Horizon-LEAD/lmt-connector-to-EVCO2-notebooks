@@ -2,7 +2,7 @@
 """
 
 from logging import getLogger
-from json import load
+from json import load, dumps
 from os.path import join
 
 import requests
@@ -16,10 +16,11 @@ def call_api(from_date, to_date):
     """Calls the API for a specific time frame
     """
 
-    url1 = ("https://apidatos.ree.es/en/datos/balance/balance-electrico?"
-           "start_date={}T00:00&end_date={}T23:59&time_trunc=day")
+    url1 = (f"https://apidatos.ree.es/en/datos/balance/balance-electrico?"
+           f"start_date={from_date}T00:00&end_date={to_date}T23:59&time_trunc=day")
+    logger.debug('url: %s', url1)
 
-    resp = requests.get(url1.format(from_date, to_date), timeout=30.).json()
+    resp = requests.get(url1, timeout=30.).json()
     ren = resp["included"][0]["attributes"]["content"][-1]["attributes"]["total"]
     nren = resp["included"][1]["attributes"]["content"][-1]["attributes"]["total"]
     tenergy = ren + nren
@@ -32,7 +33,7 @@ def call_api(from_date, to_date):
     cogeneration = resp["included"][1]["attributes"]["content"][7]["attributes"]["total"]
     non_renewable_waste = resp["included"][1]["attributes"]["content"][8]["attributes"]["total"]
 
-    return {
+    result = {
         "Combined_cycle_p": 100 * combined_cycle / tenergy,
         "Coal_p": 100 * coal / tenergy,
         "Diesel_engines_p": 100 * diesel_engines / tenergy,
@@ -41,6 +42,9 @@ def call_api(from_date, to_date):
         "ogeneration_p": 100 * cogeneration / tenergy,
         "Non_renewable_waste_p": 100 * non_renewable_waste / tenergy
     }
+    logger.debug('api result:\n%s', dumps(result, indent=2))
+
+    return result
 
 
 def run_model(lmtjson, factors, from_date, to_date, outdir):
@@ -58,6 +62,7 @@ def run_model(lmtjson, factors, from_date, to_date, outdir):
         api_result["ogeneration_p"],
         api_result["Non_renewable_waste_p"]
     ]
+    logger.debug('factors df:\n%s', df1)
     df1.to_excel(join(outdir, "factors.xlsx"), index = False)
 
     with open(lmtjson, encoding='utf8') as f_p:
@@ -90,4 +95,5 @@ def run_model(lmtjson, factors, from_date, to_date, outdir):
             [[a_1, a_2, a_3, a_4, a_5, a_6, a_7, a_8, a_9]],
             columns = columns
         )
+        logger.debug('consumption df:\n%s', df2)
         df2.to_excel(join(outdir, "consumption.xlsx"), index = False)
